@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="../css/index.css">
+    <link rel="stylesheet" href="../plugins/layui/css/layui.css" media="all">
+    <script src="../static/axios.min.js"></script>
+    <script src="../static/jquery.min.js"></script>
+    <script src="../static/vue.js"></script>
+    <script src="../js/utils.js"></script>
+    <script src="../plugins/layui/layui.js"></script>
+    <!-- <script src="http://localhost:8888/init.js"></script> -->
+    <script>
+        var event = getQueryString("event")
+        var id = getQueryString("id")
+        console.log(event);
+        console.log(id);
+
+        if (event === 'edit') {
+            $('#btn').val("保存")
+            getApi('/api/document/' + id).then(function (response) {
+                console.log(response);
+                let data = response.data;
+                $('#title').val(data.title)
+                $('#remark').val(data.remark)
+                $('#file').val();
+            }).catch(function (error) {
+                console.log(error);
+            });
+        }
+    </script>
+    <script>
+        var formData;
+
+        layui.use('layer', function () {
+            var layer = layui.layer;
+        });
+
+
+        function upload(obj) {
+            var files = obj.files;
+            formData = new FormData();
+            console.log(files.length);
+
+            for (var i = 0; i < files.length; i++) {
+                formData.append("file", files[i]);
+            }
+            console.log(formData.get("file"));
+        }
+
+        function handleClick() {
+            console.log("click");
+            console.log(formData.get("file"));
+
+            var title = $('#title').val()
+            var remark = $('#remark').val()
+            formData.append("userId", 1)
+            formData.append("title", title)
+            formData.append("remark", remark)
+            let u = '/api/document/a/'
+            if (event === "edit") {
+                u += "update"
+                formData.append("id", id)
+            } else {
+                u += "insert"
+            }
+            postApi(u, formData).then(function (response) {
+                console.log(response);
+                layer.msg("成功啦！")
+                backToUrl("data.html", event)
+            }).catch(function (error) {
+                console.log(error);
+                layer.msg("出错啦！")
+            });
+        }
+    </script>
+</head>
+
+<body>
+    <div id="app">
+        <form id="fm" method="POST" enctype="multipart/form-data">
+            <div class="box">
+                <span>标题：</span>
+                <input type="text" id="title" />
+            </div>
+            <div class="box">
+                <textarea id="remark" cols="88" rows="11"></textarea>
+            </div>
+            <!-- <button type="button" class="layui-btn" id="test1">
+                <i class="layui-icon">&#xe67c;</i>上传文件
+            </button> -->
+            <div class="box">
+                <input class="btn" type="file" onchange="upload(this)" id="file" accept=".doc,.docx,.pdf" />
+            </div>
+            <div class="box">
+                <button type="button" onclick="handleClick()" class="btn">上传</button>
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>

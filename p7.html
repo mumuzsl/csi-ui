@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>table模块快速使用</title>
+	<link rel="stylesheet" href="./plugins/layui/css/layui.css" media="all">
+
+	<!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css"
+		integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+	<!-- 可选的 Bootstrap 主题文件（一般不用引入） -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap-theme.min.css"
+		integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+	<script src="./static/jquery.min.js"></script>
+	<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"
+		integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+		crossorigin="anonymous"></script>
+</head>
+
+<body>
+	<form class="layui-form" id="app">
+		<div>
+			<div class="layui-inline">
+				<label class="layui-form-label">姓名：</label>
+				<div class="layui-input-inline">
+					<input type="text" id="select" placeholder="输入查找内容" class="layui-input" name="name">
+				</div>
+			</div>
+			<div class="layui-inline">
+				<label class="layui-form-label" style="width: 130px;">身份证号码：</label>
+				<div class="layui-input-inline">
+					<input type="text" id="select" placeholder="输入查找内容" class="layui-input" name="cardId">
+				</div>
+			</div>
+			<div class="layui-inline">
+				<label class="layui-form-label">手机：</label>
+				<div class="layui-input-inline">
+					<input type="text" id="select" placeholder="输入查找内容" class="layui-input" name="phone">
+				</div>
+			</div>
+		</div>
+		<div>
+			<div class="layui-inline">
+				<label class="layui-form-label">性别：</label>
+				<div class="layui-input-inline">
+					<select name="sex">
+						<option value="男">男</option>
+						<option value="女">女</option>
+					</select>
+				</div>
+			</div>
+			<div class="layui-inline">
+				<label class="layui-form-label">职位：</label>
+				<div class="layui-input-inline">
+					<select name="jobId">
+						<option v-for="item in jobs" :value="item.id">{{item.name}}</option>
+					</select>
+				</div>
+			</div>
+			<div class="layui-inline">
+				<label class="layui-form-label" style="width: 100px;">所属部门：</label>
+				<div class="layui-input-inline">
+					<select name="deptId">
+						<option v-for="item in depts" :value="item.id">{{item.name}}</option>
+					</select>
+				</div>
+			</div>
+			<div class="layui-inline">
+				<button class="layui-btn layui-btn-sm layui-btn-normal" lay-submit lay-filter="formDemo">搜索</button>
+			</div>
+		</div>
+	</form>
+
+	<div style="padding: 10px 0 0 10px;">
+		<!-- <button class="layui-btn layui-btn-sm layui-btn-normal" id="btnser" data-type="auto">搜索</button> -->
+		<button class="layui-btn layui-btn-sm layui-btn-normal" id="btndel" data-type="auto">删除</button>
+		<button class="layui-btn layui-btn-sm layui-btn-normal" id="btnAdd" data-type="auto">编辑</button>
+	</div>
+	<table class="layui-table" lay-filter="test" id="test">
+	</table>
+	<script src="./plugins/layui/layui.js"></script>
+	<script src="./static/jquery.min.js"></script>
+	<script src="./js/utils.js"></script>
+	<script src="./static/vue.js"></script>
+	<script src="./static/axios.min.js"></script>
+	<script src="./js/bg.js"></script>
+	<script type="text/html" id="barDemo">
+		{{# if (d.S==1){}}
+		<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+		<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+		{{#}else{}}
+		<p style="color: red; font-size: smaller;">管理员操作已隐藏</p>
+		{{#}}}
+	</script>
+	<script>
+		var app = new Vue({
+			el: '#app',
+			data() {
+				return {
+					depts: [],
+					jobs: []
+				}
+			},
+			mounted: function () {
+				this.getList()
+			},
+			methods: {
+				getList() {
+					getApi('/api/dept').then((response) => {
+						console.log(response);
+						this.depts = response.data.content
+					}).catch(function (error) {
+						console.log(error);
+					});
+					getApi('/api/job').then((response) => {
+						console.log(response);
+						this.jobs = response.data.content
+					}).catch(function (error) {
+						console.log(error);
+					});
+				}
+			}
+		})
+	</script>
+	<script>
+		var url = '/api/employee'
+		var cols = [
+			{ field: 'name', title: '姓名' },
+			{ field: 'remark', title: '备注' },
+			{ field: 'sex', title: "性别" },
+			{ field: 'phone', title: "手机号码" },
+			{ field: 'email', title: "邮箱" },
+			{ field: 'job', title: "职位" },
+			{ field: 'education', title: "学历" },
+			{ field: 'card_id', title: "身份证号码" },
+			{ field: 'dept', title: "部门" },
+			{ field: 'address', title: "联系地址" },
+			{
+				field: 'create_time', title: "创建时间",
+				templet: function (d) {
+					return datetimeFormat(d.createTime);
+				}
+			},
+			{ fixed: 'right', width: 120, align: 'center', toolbar: '#barDemo' }
+		]
+
+		layui.use('table', function () {
+			var table = layui.table;
+
+			table.render(getRender(
+				'#test',
+				url,
+				cols
+			))
+
+			//监听行工具事件
+			table.on('tool(test)', function (obj) { //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+				var data = obj.data //获得当前行数据
+					, layEvent = obj.event; //获得 lay-event 对应的值
+				if (layEvent === 'del') {
+					layer.confirm('真的删除行么', function (index) {
+						obj.del(); //删除对应行（tr）的DOM结构
+						layer.close(index);
+						//向服务端发送删除指令
+						postApi('/api/employee/a/delete', [data.id]).then((response) => {
+							console.log(response);
+							layer.msg(response.data.message)
+						}).catch(function (error) {
+							console.log(error);
+							layer.msg("出错啦！")
+						});
+					});
+				} else if (layEvent === 'edit') {
+					layer.msg('编辑操作');
+					console.log(data)
+					window.location.href = "p8.html?event=edit&id=" + data.id
+				}
+			});
+		});
+
+		layui.use('form', function () {
+			var form = layui.form;
+
+			//监听提交
+			form.on('submit(formDemo)', function (data) {
+				// layer.msg(JSON.stringify(data.field));
+				console.log(JSON.stringify(data.field))
+
+				var field = data.field
+				var obj = {}
+				for (let key in field) {
+					if (field[key] != "") {
+						obj[key] = field[key]
+					}
+				}
+				obj['keyword'] = 'all'
+
+				layui.use('table', function () {
+					var table = layui.table;
+
+					table.render(getRender(
+						'#test',
+						url,
+						cols,
+						obj
+					))
+				});
+
+				return false;
+			});
+		});
+
+		$("#btnAdd").click(function () {
+
+			//通过这种方式弹出的层，每当它被选择，就会置顶。
+			layer.open({
+				type: 1,
+				shade: [0.4, '#393D49'],
+				area: ['600px', '400px'],
+				maxmin: true,
+				content: $("#form1"),
+				zIndex: layer.zIndex, //重点1
+				success: function (layero) {
+					layer.setTop(layero); //重点2
+				},
+				btn: ['确定', '取消'],
+				yes: function (index, layero) {
+					//按钮【按钮一】的回调
+				},
+				btn2: function (index, layero) {
+					//按钮【按钮二】的回调
+
+					//return false 开启该代码可禁止点击该按钮关闭
+				},
+
+				cancel: function () {
+					//右上角关闭回调
+
+					//return false 开启该代码可禁止点击该按钮关闭
+				}
+			});
+
+		});
+	</script>
+</body>
+<fieldset id="form1" hidden="hidden">
+	<legend>用户信息</legend>
+
+
+
+	<form class="form-inline">
+		<div class="form-group">
+			<label for="name">姓 名：</label> <input type="text" class="form-control" id="name" placeholder="">
+		</div>
+		<div class="form-group">
+			<label for="shenfenzheng">身份证号码：</label> <input type="text" class="form-control" id="shenfenzheng"
+				placeholder="">
+		</div>
+	</form>
+
+	<form class="form-inline">
+		<div class="form-group">
+			<label for="sex">性 别：</label> <input type="text" class="form-control" id="sex" placeholder="">
+		</div>
+		<div class="form-group">
+			<label for="chushengriqi">出 生 日 期：</label> <input type="text" class="form-control" id="chushengriqi"
+				placeholder="">
+		</div>
+	</form>
+
+
+	<form class="form-inline">
+		<div class="form-group">
+			<label for="minzu">民 族：</label> <input type="text" class="form-control" id="minzu" placeholder="">
+		</div>
+		<div class="form-group">
+			<label for="zhengzhimianmao">政 治 面 貌：</label> <input type="text" class="form-control" id="zhengzhimianmao"
+				placeholder="">
+		</div>
+
+	</form>
+
+	<form class="form-inline">
+		<div class="form-group">
+			<label for="xueli">学 历：</label> <input type="text" class="form-control" id="xueli" placeholder="">
+		</div>
+		<div class="form-group">
+			<label for="suoxuezhuanye">所 学 专 业：</label> <input type="text" class="form-control" id="suoxuezhuanye"
+				placeholder="">
+		</div>
+	</form>
+
+	<form class="form-inline">
+		<div class="form-group">
+			<label for="shouji">手 机：</label> <input type="text" class="form-control" id="shouji" placeholder="">
+		</div>
+		<div class="form-group">
+			<label for="address">联 系 地 址：</label> <input type="text" class="form-control" id="address" placeholder="">
+		</div>
+	</form>
+
+	<form class="form-inline">
+		<div class="form-group">
+			<label for="dianhua">电 话：</label> <input type="text" class="form-control" id="dianhua" placeholder="">
+		</div>
+		<div class="form-group">
+			<label for="suoshubumen">所 属 部 门：</label> <input type="text" class="form-control" id="suoshubumen"
+				placeholder="">
+		</div>
+	</form>
+
+	<form class="form-inline">
+		<div class="form-group">
+			<label for="email">邮 箱：</label> <input type="text" class="form-control" id="email" placeholder="">
+		</div>
+		<div class="form-group">
+			<label for="youzhengbianma">邮 政 编 码：</label> <input type="text" class="form-control" id="youzhengbianma"
+				placeholder="">
+		</div>
+	</form>
+
+	<form class="form-inline">
+		<div class="form-group">
+			<label for="zhiwei">职 位：</label> <input type="text" class="form-control" id="zhiwei" placeholder="">
+		</div>
+		<div class="form-group">
+			<label for="QQ">QQ 号 码 ：</label> <input type="text" class="form-control" id="QQ" placeholder="">
+		</div>
+	</form>
+	<form class="form-inline">
+		<div class="form-group">
+			<label for="aihao">爱 好：</label> <input type="text" class="form-control" id="aihao" placeholder="">
+		</div>
+		<div class="form-group">
+			<label for="beizhu">备 注：</label> <input type="text" class="form-control" id="beizhu" placeholder="">
+		</div>
+	</form>
+
+	<p>
+		<button type="button" id="btnSave" onclick="layer.closeAll()">保存</button>
+		<button type="button" id="btnUpdate">取消</button>
+	</p>
+</fieldset>
+
+</html>

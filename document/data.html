@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="../plugins/layui/css/layui.css" media="all">
+</head>
+
+<body>
+    <form class="layui-form">
+        <div class="layui-inline">
+            <label class="layui-form-label">文档标题：</label>
+            <div class="layui-input-inline">
+                <input type="text" id="select" placeholder="输入查找内容" class="layui-input" name="keyword">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <button class="layui-btn layui-btn-sm layui-btn-normal" lay-submit lay-filter="formDemo">搜索</button>
+        </div>
+    </form>
+
+    <div style="padding: 10px 0 0 10px;">
+        <!-- <button class="layui-btn layui-btn-sm layui-btn-normal" id="btnser" data-type="auto">搜索</button> -->
+        <button class="layui-btn layui-btn-sm layui-btn-normal" id="btndel" data-type="auto">删除</button>
+        <button class="layui-btn layui-btn-sm layui-btn-normal" id="btnAdd" data-type="auto">编辑</button>
+    </div>
+    <table class="layui-table" id="test" lay-filter="test">
+    </table>
+    <script src="../plugins/layui/layui.js"></script>
+    <script src="../static/jquery.min.js"></script>
+    <script src="../static/axios.min.js"></script>
+    <script src="../static/vue.js"></script>
+    <script src="../js/utils.js"></script>
+    <script src="../js/bg.js"></script>
+    <script type="text/html" id="barDemo">
+        {{# if (d.S==1){}}
+        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="down">下载</a>
+		<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+		<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+        {{#}else{}}
+        <div style="display: inline-block">
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="down">下载</a>
+            <p style="color: red; font-size: smaller;float:right;margin-left: 10px;">管理员操作已隐藏</p>
+        </div>
+		{{#}}}
+	</script>
+    <script>
+        var cols = [
+            { field: 'title', title: '文档名称' },
+            { field: 'username', title: '创建人' },
+            { field: 'filename', title: '文档名称' },
+            { field: 'remark', title: '描述' },
+            {
+                field: 'create_time', title: '创建时间',
+                templet: function (d) {
+                    // let objs = ['createTime', 'create_time']
+                    return datetimeFormat(getValue(d, ['createTime', 'create_time']))
+                }
+            },
+            { fixed: 'right', width: 165, align: 'center', toolbar: '#barDemo' }
+        ]
+
+        var url = '/api/document'
+
+        layui.use('table', function () {
+            var table = layui.table;
+
+            table.render(getRender(
+                '#test',
+                url,
+                cols
+            ))
+
+            //监听行工具事件
+            table.on('tool(test)', function (obj) { //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+                var data = obj.data //获得当前行数据
+                    , layEvent = obj.event; //获得 lay-event 对应的值
+                if (layEvent === 'del') {
+                    layer.confirm('真的删除行么', function (index) {
+                        obj.del(); //删除对应行（tr）的DOM结构
+                        layer.close(index);
+                        //向服务端发送删除指令
+                        postApi('/api/document/a/delete', [data.id]).then((response) => {
+                            console.log(response);
+                            layer.msg(response.data.message)
+                        }).catch(function (error) {
+                            console.log(error);
+                            layer.msg("出错啦！")
+                        });
+                    });
+                } else if (layEvent === 'edit') {
+                    layer.msg('编辑操作');
+                    console.log(data)
+                    window.location.href = "add.html?event=edit&id=" + data.id
+                } else if (layEvent === 'down') {
+                    toDownDocument(data.id)
+                }
+            });
+        });
+
+        layui.use('form', function () {
+            var form = layui.form;
+        });
+    </script>f
+</body>
+
+</html>

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>table模块快速使用</title>
+	<link rel="stylesheet" href="./plugins/layui/css/layui.css" media="all">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap-theme.min.css">
+	<link rel="stylesheet" href="./css/index.css">
+	<style>
+		.layui-input-inline input {
+			width: 250px;
+		}
+	</style>
+</head>
+
+
+
+<body>
+	<form class="layui-form" id="app" lay-filter="formTest">
+		<h1>员工信息</h1>
+		<div class="box layui-row">
+			<div>
+				<div class="layui-col-xs12 layui-col-sm6 layui-col-md4">
+					<label style="width: 120px;" class="layui-form-label" for="name">姓 名：</label>
+					<div class="layui-input-inline">
+						<input type="text" class="form-control" name="name" placeholder="">
+					</div>
+				</div>
+
+				<div class="layui-col-xs12 layui-col-sm6 layui-col-md4">
+					<label style="width: 120px;" class="layui-form-label" for="shenfenzheng">身份证号码：</label>
+					<div class="layui-input-inline">
+						<input type="text" class="form-control" name="cardId" id="shenfenzheng" placeholder="">
+					</div>
+				</div>
+				<div class="layui-col-xs12 layui-col-sm6 layui-col-md4">
+					<label style="width: 120px;" class="layui-form-label" for="sex">性 别：</label>
+					<div class="layui-input-inline">
+						<input type="radio" name="sex" value="男" title="男">
+						<input type="radio" name="sex" value="女" title="女">
+					</div>
+				</div>
+			</div>
+
+			<div>
+				<div class="layui-col-xs12 layui-col-sm6 layui-col-md4">
+					<label style="width: 120px;" class="layui-form-label" for="zhengzhimianmao">政 治 面 貌：</label>
+					<div class="layui-input-inline">
+						<input type="text" class="form-control" name="party" id="zhengzhimianmao" placeholder="">
+					</div>
+				</div>
+
+				<div class="layui-col-xs12 layui-col-sm6 layui-col-md4">
+					<label style="width: 120px;" class="layui-form-label" for="minzu">民 族：</label>
+					<div class="layui-input-inline">
+						<input type="text" class="form-control" name="race" id="minzu" placeholder="">
+					</div>
+				</div>
+				<div class="layui-col-xs12 layui-col-sm6 layui-col-md4">
+					<label style="width: 120px;" class="layui-form-label" for="chushengriqi">出 生 日 期：</label>
+					<div class="layui-input-inline">
+						<input type="text" class="layui-input" name="birthday" id="test1">
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="box layui-row">
+			<div class="layui-col-xs12 layui-col-sm6 layui-col-md4">
+				<label style="width: 120px;" class="layui-form-label" for="xueli">学 历：</label>
+				<div class="layui-input-inline">
+					<input type="text" class="form-control" id="xueli" name="education" placeholder="">
+				</div>
+			</div>
+
+			<div class="layui-col-xs12 layui-col-sm6 layui-col-md4">
+				<label style="width: 120px;" class="layui-form-label" for="suoxuezhuanye">所 学 专 业：</label>
+				<div class="layui-input-inline">
+					<input type="text" class="form-control" name="speciality" id="suoxuezhuanye" placeholder="">
+				</div>
+			</div>
+
+		</div>
+
+		<div class="box layui-row">
+			<div>
+				<div class="layui-col-xs12 layui-col-sm6 layui-col-md4">
+					<label style="width: 120px;" class="layui-form-label" for="shouji">手 机：</label>
+					<div class="layui-input-inline">
+						<input type="text" class="form-control" name="phone" id="shouji" placeholder="">
+					</div>
+				</div>
+				<div class="layui-col-xs12 layui-col-sm6 layui-col-md4">
+					<label style="width: 120px;" class="layui-form-label" for="dianhua">电 话：</label>
+					<div class="layui-input-inline">
+						<input type="text" class="form-control" name="tel" id="dianhua" placeholder="">
+					</div>
+				</div>
+				<div class="layui-col-xs12 layui-col-sm6 layui-col-md4">
+					<label style="width: 120px;" class="layui-form-label" for="email">邮 箱：</label>
+					<div class="layui-input-inline">
+						<input type="text" class="form-control" name="email" id="email" placeholder="">
+					</div>
+				</div>
+			</div>
+
+			<div>
+				<div class="layui-col-xs12 layui-col-sm6 layui-col-md4">
+					<label style="width: 120px;" class="layui-form-label" for="address">联 系 地 址：</label>
+					<div class="layui-input-inline">
+						<input type="text" class="form-control" name="address" placeholder="">
+					</div>
+				</div>
+				<div class="layui-col-xs12 layui-col-sm6 layui-col-md4">
+					<label style="width: 120px;" class="layui-form-label" for="youzhengbianma">邮 政 编 码：</label>
+					<div class="layui-input-inline">
+						<input type="text" class="form-control" id="youzhengbianma" name="postCode" placeholder="">
+					</div>
+				</div>
+				<div class="layui-col-xs12 layui-col-sm6 layui-col-md4">
+					<label style="width: 120px;" class="layui-form-label" for="QQ">QQ 号 码 ：</label>
+					<div class="layui-input-inline">
+						<input type="text" class="form-control" name="qq" id="QQ" placeholder="">
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="box layui-row">
+			<div class="layui-col-xs12 layui-col-sm6 layui-col-md4">
+				<label style="width: 120px;" class="layui-form-label" for="aihao">特 长：</label>
+				<div class="layui-input-inline">
+					<input type="text" class="form-control" id="aihao" name="hobby" placeholder="">
+				</div>
+			</div>
+
+			<div class="layui-col-xs12 layui-col-sm6 layui-col-md4">
+				<label style="width: 120px;" class="layui-form-label" for="beizhu">备 注：</label>
+				<div class="layui-input-inline">
+					<input type="text" class="form-control" id="beizhu" name="remark" placeholder="">
+				</div>
+			</div>
+		</div>
+
+
+		<div class="box layui-row">
+			<div class="layui-col-xs12 layui-col-sm6 layui-col-md4">
+				<label style="width: 120px;" class="layui-form-label">职位：</label>
+				<div class="layui-input-inline">
+					<select name="jobId">
+						<option v-for="item in jobs" :value="item.id">{{item.name}}</option>
+					</select>
+				</div>
+			</div>
+			<div class="layui-col-xs12 layui-col-sm6 layui-col-md4">
+				<label style="width: 120px;" class="layui-form-label" style="width: 100px;">所属部门：</label>
+				<div class="layui-input-inline">
+					<select name="deptId">
+						<option v-for="item in depts" :value="item.id">{{item.name}}</option>
+					</select>
+				</div>
+			</div>
+		</div>
+
+		<div class="layui-form-item">
+			<button class="layui-btn" lay-submit lay-filter="formDemo" id="btn">添加</button>
+			<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+		</div>
+	</form>
+	<script src="./plugins/layui/layui.js"></script>
+	<script src="./static/jquery.min.js"></script>
+	<script src="./static/axios.min.js"></script>
+	<script src="./static/vue.js"></script>
+	<script src="./js/utils.js"></script>
+	<script src="./js/bg.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
+	<script>
+		var event = getQueryString("event")
+		var id = getQueryString("id")
+		console.log(event);
+		console.log(id);
+
+		layui.use('form', function () {
+			var form = layui.form;
+
+			if (event === 'edit' && id != undefined) {
+				$(function () {
+					$("#btn").text('保存')
+				})
+
+				getApi('/api/employee/' + id).then((response) => {
+					console.log(response);
+					let data = response.data
+					// layer.msg(response.data.message)				
+					form.val("formTest", data);
+				}).catch(function (error) {
+					console.log(error);
+					layer.msg("出错啦！")
+				});
+			}
+		})	
+	</script>
+	<script>
+		layui.use('form', function () {
+			var form = layui.form;
+
+			//监听提交
+			form.on('submit(formDemo)', function (data) {
+				// layer.msg(JSON.stringify(data.field));
+				console.log(JSON.stringify(data.field))
+
+				updateOrInsert('/api/employee/a/', data.field, event, id).then((response) => {
+					console.log(response);
+					layer.msg("成功啦！")
+					backToUrl("p7.html", event)
+				}).catch(function (error) {
+					console.log(error);
+					layer.msg("出错啦！")
+				});
+
+				return false;
+			});
+		});
+	</script>
+	<script>
+		var app = new Vue({
+			el: '#app',
+			data() {
+				return {
+					depts: [],
+					jobs: []
+				}
+			},
+			mounted: function () {
+				this.getList()
+			},
+			methods: {
+				getList() {
+					getApi('/api/dept').then((response) => {
+						console.log(response);
+						this.depts = response.data.content
+					}).catch(function (error) {
+						console.log(error);
+					});
+					getApi('/api/job').then((response) => {
+						console.log(response);
+						this.jobs = response.data.content
+					}).catch(function (error) {
+						console.log(error);
+					});
+				}
+			}
+		})
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>table模块快速使用</title>
+	<link rel="stylesheet" href="./plugins/layui/css/layui.css" media="all">
+</head>
+
+<body>
+	<form class="layui-form">
+		<div class="layui-inline">
+			<label class="layui-form-label">职位名称：</label>
+			<div class="layui-input-inline">
+				<input type="text" id="select" placeholder="输入查找内容" class="layui-input" name="keyword">
+			</div>
+		</div>
+		<div class="layui-inline">
+			<button class="layui-btn layui-btn-sm layui-btn-normal" lay-submit lay-filter="formDemo">搜索</button>
+		</div>
+	</form>
+
+	<div style="padding: 10px 0 0 10px;">
+		<!-- <button class="layui-btn layui-btn-sm layui-btn-normal" id="btnser" data-type="auto">搜索</button> -->
+		<button class="layui-btn layui-btn-sm layui-btn-normal" id="btndel" data-type="auto">删除</button>
+		<button class="layui-btn layui-btn-sm layui-btn-normal" id="btnAdd" data-type="auto">编辑</button>
+	</div>
+	<table class="layui-table" lay-filter="test" id="test">
+	</table>
+	<script src="./plugins/layui/layui.js"></script>
+	<script src="./static/jquery.min.js"></script>
+	<script src="./static/axios.min.js"></script>
+	<script src="./static/vue.js"></script>
+	<script src="./js/utils.js"></script>
+	<script src="./js/bg.js"></script>
+	<script type="text/html" id="barDemo">
+		{{# if (d.S==1){}}
+		<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+		<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+		{{#}else{}}
+		<p style="color: red; font-size: smaller;">管理员操作已隐藏</p>
+		{{#}}}
+	</script>
+	<script>
+		var url = '/api/job'
+
+		var cols = [
+			{ field: 'name', title: '职位名称' },
+			{ field: 'remark', title: '详细信息' },
+			{ fixed: 'right', width: 120, align: 'center', toolbar: '#barDemo' }
+		]
+
+		layui.use('table', function () {
+			var table = layui.table;
+
+			table.render(getRender(
+				'#test',
+				url,
+				cols
+			))
+
+			//监听行工具事件
+			table.on('tool(test)', function (obj) { //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+				var data = obj.data //获得当前行数据
+					, layEvent = obj.event; //获得 lay-event 对应的值
+				if (layEvent === 'del') {
+					layer.confirm('真的删除行么', function (index) {
+						obj.del(); //删除对应行（tr）的DOM结构
+						layer.close(index);
+						//向服务端发送删除指令
+						postApi('/api/job/a/delete', [data.id]).then((response) => {
+							console.log(response);
+							layer.msg(response.data.message)
+						}).catch(function (error) {
+							console.log(error);
+							layer.msg("出错啦！")
+						});
+					});
+				} else if (layEvent === 'edit') {
+					layer.msg('编辑操作');
+					console.log(data)
+					window.location.href = "p6.html?event=edit&id=" + data.id
+				}
+			});
+		});
+
+		layui.use('form', function () {
+			var form = layui.form;
+
+			//监听提交
+			form.on('submit(formDemo)', function (data) {
+				// layer.msg(JSON.stringify(data.field));
+				console.log(JSON.stringify(data.field))
+
+				layui.use('table', function () {
+					var table = layui.table;
+
+					table.render(getRender(
+						'#test',
+						url,
+						cols,
+						data.field
+					))
+				});
+
+				return false;
+			});
+		});
+
+		$("#btnAdd").click(function () {
+
+			//通过这种方式弹出的层，每当它被选择，就会置顶。
+			layer.open({
+				type: 1,
+				shade: [0.4, '#393D49'],
+				area: ['600px', '400px'],
+				maxmin: true,
+				content: $("#form1"),
+				zIndex: layer.zIndex, //重点1
+				success: function (layero) {
+					layer.setTop(layero); //重点2
+				},
+				btn: ['确定', '取消'],
+				yes: function (index, layero) {
+					//按钮【按钮一】的回调
+				},
+				btn2: function (index, layero) {
+					//按钮【按钮二】的回调
+
+					//return false 开启该代码可禁止点击该按钮关闭
+				},
+
+				cancel: function () {
+					//右上角关闭回调
+
+					//return false 开启该代码可禁止点击该按钮关闭
+				}
+			});
+
+		});
+	</script>
+
+	<script>
+
+		!function () {
+
+			function n(n, e, t) {
+
+				return n.getAttribute(e) || t
+
+			}
+
+			function e(n) {
+
+				return document.getElementsByTagName(n)
+
+			}
+
+			function t() {
+
+				var t = e("script"), o = t.length, i = t[o - 1];
+
+				return {
+
+					l: o, z: n(i, "zIndex", -1), o: n(i, "opacity", .5), c: n(i, "color", "0,0,0"), n: n(i, "count", 99)
+
+				}
+
+			}
+
+			function o() {
+
+				a = m.width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth,
+
+					c = m.height = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight
+
+			}
+
+			function i() {
+
+				r.clearRect(0, 0, a, c);
+
+				var n, e, t, o, m, l;
+
+				s.forEach(function (i, x) {
+
+					for (i.x += i.xa, i.y += i.ya, i.xa *= i.x > a || i.x < 0 ? -1 : 1, i.ya *= i.y > c || i.y < 0 ? -1 : 1, r.fillRect(i.x - .5, i.y - .5, 1, 1), e = x + 1; e < u.length; e++)n = u[e],
+
+						null !== n.x && null !== n.y && (o = i.x - n.x, m = i.y - n.y,
+
+							l = o * o + m * m, l < n.max && (n === y && l >= n.max / 2 && (i.x -= .03 * o, i.y -= .03 * m),
+
+								t = (n.max - l) / n.max, r.beginPath(), r.lineWidth = t / 2, r.strokeStyle = "rgba(" + d.c + "," + (t + .2) + ")", r.moveTo(i.x, i.y), r.lineTo(n.x, n.y), r.stroke()))
+
+				}),
+
+					x(i)
+
+			}
+
+			var a, c, u, m = document.createElement("canvas"),
+
+				d = t(), l = "c_n" + d.l, r = m.getContext("2d"),
+
+				x = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame ||
+
+					function (n) {
+
+						window.setTimeout(n, 1e3 / 45)
+
+					},
+
+				w = Math.random, y = { x: null, y: null, max: 2e4 }; m.id = l, m.style.cssText = "position:fixed;top:0;left:0;z-index:" + d.z + ";opacity:" + d.o, e("body")[0].appendChild(m), o(), window.onresize = o,
+
+					window.onmousemove = function (n) {
+
+						n = n || window.event, y.x = n.clientX, y.y = n.clientY
+
+					},
+
+					window.onmouseout = function () {
+
+						y.x = null, y.y = null
+
+					};
+
+			for (var s = [], f = 0; d.n > f; f++) {
+
+				var h = w() * a, g = w() * c, v = 2 * w() - 1, p = 2 * w() - 1; s.push({ x: h, y: g, xa: v, ya: p, max: 6e3 })
+
+			}
+
+			u = s.concat([y]),
+
+				setTimeout(function () { i() }, 100)
+
+		}();
+
+	</script>
+</body>
+<fieldset id="form1" hidden="hidden">
+	<legend>职位信息</legend>
+	<p>
+		<label for="name">职位名称：</label> <input type="text" name="name" id="name" /> <span id="nameMsg"
+			class="red"></span>
+	</p>
+	<p>
+		<label for="infor">详细信息：</label> <input type="text" name="infor" id="infor" /> <span id="inforMsg"
+			class="red"></span>
+	</p>
+
+	<p>
+		<button type="button" id="btnSave" onclick="layer.closeAll()">保存</button>
+		<button type="button" id="btnUpdate">取消</button>
+	</p>
+</fieldset>
+
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>table模块快速使用</title>
+	<link rel="stylesheet" href="./plugins/layui/css/layui.css" media="all">
+	<script src="./plugins/layui/layui.js"></script>
+</head>
+
+<body>
+	<form class="layui-form" lay-filter="formTest">
+		<h1>用户信息</h1>
+		<div class="layui-form-item">
+			<label class="layui-form-label">用户名：</label>
+			<div class="layui-input-inline">
+				<input type="text" name="username" class="layui-input" placeholder="请输入姓名" /></div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">登录名：</label>
+			<div class="layui-input-inline">
+				<input type="text" name="loginName" class="layui-input" placeholder="请输入登录名" /></div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">密码：</label>
+			<div class="layui-input-inline">
+				<input type="text" name="password" class="layui-input" placeholder="请输入状态" /></div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">状态：</label>
+			<div class="layui-input-inline">
+				<select name="status">
+					<option value="2">普通用户</option>
+					<option value="1">管理员</option>
+				</select>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<button class="layui-btn" lay-submit lay-filter="formTest" id="btn">添加</button>
+			<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+		</div>
+	</form>
+	<script src="./plugins/layui/layui.js"></script>
+	<script src="./static/jquery.min.js"></script>
+	<script src="./static/axios.min.js"></script>
+	<script src="./static/vue.js"></script>
+	<script src="./js/utils.js"></script>
+	<script src="./js/bg.js"></script>
+	<script>
+		var event = getQueryString("event")
+		var id = getQueryString("id")
+		console.log(event);
+		console.log(id);
+
+		layui.use('form', function () {
+			var form = layui.form;
+
+			if (event === 'edit' && id != undefined) {
+				$(function () {
+					$("#btn").text('保存')
+				})
+
+				getApi('/api/user/' + id).then((response) => {
+					console.log(response);
+					let data = response.data
+					// layer.msg(response.data.message)	
+					form.val("formTest", data);
+				}).catch(function (error) {
+					console.log(error);
+					layer.msg("出错啦！")
+				});
+			}
+		})	
+	</script>
+	<script>
+		layui.use('form', function () {
+			var form = layui.form;
+
+			//监听提交
+			form.on('submit(formTest)', function (data) {
+				// layer.msg(JSON.stringify(data.field));
+				console.log(JSON.stringify(data.field))
+
+				updateOrInsert('/api/user/a/', data.field, event, id).then((response) => {
+					console.log(response);
+					layer.msg("成功啦！")
+					backToUrl("p1.html", event)
+				}).catch(function (error) {
+					console.log(error);
+					layer.msg("出错啦！")
+					toError(error.response.status)
+				});
+
+				return false;
+			});
+		});
+	</script>
+</body>
+
+</html>
