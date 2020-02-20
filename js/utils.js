@@ -1,6 +1,8 @@
-const rootUrl = 'http://localhost:8888'
-
-const token = 'token=2f373797591948a398244d60766964ce'
+// const rootUrl = 'http://localhost:8888'
+const rootUrl = 'http://mumu.biz:8888'
+const token = 'token=666666'
+const user_status = 1
+// const token = 'token=2f373797591948a398244d60766964ce'
 
 
 const user_status = 2
