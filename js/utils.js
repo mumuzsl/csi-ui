@@ -1,8 +1,8 @@
 // const rootUrl = 'http://mumu.biz:8888'
 // const token = 'token=666666'
 const user_status = 1
-const rootUrl = 'http://localhost:8888'
-const token = '2f373797591948a398244d60766964ce'
+const rootUrl = 'http://47.98.147.56:9999'
+const token = '666666'
 
 function toError(httpStatus) {
     if (httpStatus === 403) {
