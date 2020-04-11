@@ -1,7 +1,8 @@
 // const rootUrl = 'http://mumu.biz:8888'
 // const token = 'token=666666'
 const user_status = 1
-const rootUrl = 'http://47.98.147.56:9999'
+// const rootUrl = 'http://47.98.147.56:9999'
+const rootUrl = 'http://localhost:9999'
 const token = '666666'
 
 function toError(httpStatus) {
@@ -31,11 +32,19 @@ function perfectUrl(url) {
 }
 
 function getApi(url) {
-    return axios.get(perfectUrl(url))
+    return axios.get(perfectUrl(url), {
+        //请求头配置  
+        headers: { token: token }
+    })
 }
 
 function postApi(url, data) {
-    return axios.post(perfectUrl(url), data)
+    return axios.post(perfectUrl(url), //参数列表
+        data,
+        //请求头配置   
+        {
+            headers: { token: token }
+        })
 }
 
 function joinUrl(data) {
