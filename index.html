@@ -204,7 +204,11 @@
         },
         handleLogout() {
           // toUrlAndToken()
-          getApi('/logout')
+          getApi('/logout').then((response) => {
+          }).catch(function (error) {
+            console.log(error);
+            // layer.msg("获取用户信息失败啦！")
+          });
         },
         handleFaceRegister() {
           toLocalUrl('./face/index.html?s=1')

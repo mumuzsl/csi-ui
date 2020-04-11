@@ -85,7 +85,7 @@
             z-index: -2;
         }
 
-        #app{
+        #app {
             position: absolute;
             z-index: -1;
         }
@@ -99,7 +99,7 @@
             <canvas id="canvas" width="530" height="300"></canvas>
         </div>
         <div class="center-box">
-            <button @click="handleFace" class="btn">{{btn_status===0?'登录':'注册'}}</button>
+            <button @click="handleFace" class="btn" v-bind:disabled="btn_disable">{{btn_status===0?'登录':'注册'}}</button>
         </div>
         <div class="center-box msg-box">
             <span>{{api_msg}}</span>
@@ -165,8 +165,9 @@
             el: '#app',
             data() {
                 return {
+                    btn_disable: true,
                     btn_status: 0,
-                    api_msg: 'aaaaa'
+                    api_msg: '当前人脸各项功能需要https，故暂不支持人脸各项功能'
                 }
             },
             mounted() {
