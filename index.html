@@ -203,10 +203,11 @@
           });
         },
         handleLogout() {
-          toUrlAndToken('/logout')
+          // toUrlAndToken()
+          getApi('/logout')
         },
         handleFaceRegister() {
-          toLocalUrl('/face/index.html?s=1')
+          toLocalUrl('./face/index.html?s=1')
         }
       }
     })
