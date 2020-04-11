@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>登录</title>
+    <script src="../static/axios.min.js"></script>
+    <script src="../static/jquery.min.js"></script>
+    <script src="../static/vue.js"></script>
+    <script src="../js/utils.js"></script>
+</head>
+
+<body>
+<div id="app">
+    <input type="text" placeholder="请输入登录名" id="login-name"/>
+    <input type="password" placeholder="请输入密码" id="password" @keyup.enter="handleEnter"/>
+    <button @click="handleLogin">登录</button>
+    <button>刷脸</button>
+    <div>{{login_tip}}</div>
+
+    <div v-on:show></div>
+</div>
+<script>
+    var app = new Vue({
+        el: '#app',
+        data() {
+            return {
+                login_tip: "",
+                loginName: "",
+                password: ""
+            }
+        },
+        methods: {
+            handleEnter() {
+                loginClick()
+            },
+            handleLogin() {
+                var data = {
+                    loginName: this.loginName,
+                    password: this.password
+                }
+                postApi('/login', data)
+                    .then((resp) => {
+                        console.log(resp);
+
+                    })
+                    .catch((error) => {
+                        let msg = error.response.data.message;
+                        console.log(msg);
+                        app.login_tip = msg;
+                    })
+            }
+        }
+    })
+</script>
+<script>
+    function loginAJAX(loginName, password) {
+        axios({
+            url: loginUrl,
+            method: 'post',
+            data: JSON.stringify({
+                loginName: loginName.trim(),
+                password: password.trim()
+            }),
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Content-Type': 'application/json'
+            }
+        })
+            .then((resp) => {
+                console.log(resp);
+
+            })
+            .catch((error) => {
+                let msg = error.response.data.message;
+                console.log(msg);
+                app.login_tip = msg;
+            })
+    }
+
+    var loginClick = function () {
+        var loginName = $("#login-name").val()
+        var password = $("#password").val()
+        var data = {
+            loginName: loginName.trim(),
+            password: password.trim()
+        }
+        console.log(JSON.stringify(data));
+
+        let token = 'aaaaaaaaaaaaaaaaaaaaa';
+        saveToken(token);
+
+        loginAJAX(loginName, password)
+    }
+
+    $(document).ready(() => {
+        $("#login-btn").click(() => {
+            loginClick()
+        })
+    })
+</script>
+</body>
+
+</html>

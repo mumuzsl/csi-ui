@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>刷脸登录</title>
+    <script src="../static/axios.min.js"></script>
+    <script src="../static/jquery.min.js"></script>
+    <script src="../static/vue.js"></script>
+    <script src="../js/utils.js"></script>
+    <style>
+        .media {
+            width: 100%;
+            height: 250px;
+            overflow: hidden;
+            opacity: 0.7px;
+            /* border: 1px red solid; */
+        }
+
+        #app {
+            width: 100%;
+            /* height: 100%; */
+            margin-top: 100px;
+            /* margin: 10px auto 0; */
+            border-radius: 30px;
+            /* border: 1px blue solid; */
+        }
+
+        .btn {
+            border-radius: 10px;
+            width: 100%;
+            height: 50px;
+            font-size: 25px;
+            text-align: center;
+            /* letter-spacing: 50px; */
+            /* text-indent: 40px; */
+            border: 0px white solid;
+            background-color: #ff6700;
+            color: white;
+            opacity: 1;
+            outline: none;
+            /* margin: 0 auto; */
+        }
+
+        .center-box {
+            width: 20%;
+            /* height: 50px; */
+            /* display: inline-block; */
+            margin: 0 auto;
+            margin-top: 50px;
+            /* margin-left: 50%; */
+            /* margin-right: 50%; */
+            /* border: 10px yellow solid; */
+        }
+
+        .btn:hover {
+            opacity: .8;
+            /* border: 2px whitesmoke solid; */
+        }
+
+        .btn:active {
+            /* border: 5px #44cef6 solid; */
+            opacity: 1;
+        }
+
+        .msg-box {
+            text-align: center;
+            color: red;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            /* overflow: hidden; */
+            /* background: #111; */
+        }
+
+        #world {
+            position: absolute;
+            z-index: -2;
+        }
+
+        #app{
+            position: absolute;
+            z-index: -1;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div class="media">
+            <video id="video" width="100%" height="300" autoplay></video>
+            <canvas id="canvas" width="530" height="300"></canvas>
+        </div>
+        <div class="center-box">
+            <button @click="handleFace" class="btn">{{btn_status===0?'登录':'注册'}}</button>
+        </div>
+        <div class="center-box msg-box">
+            <span>{{api_msg}}</span>
+        </div>
+    </div>
+    <canvas id="world"></canvas>
+    <script src="../js/bg2.js"></script>
+    <script>
+        var s = getQueryString('s')
+        console.log(typeof (s))
+    </script>
+    <script>
+        function run() {
+            var video = document.getElementById("video"); //获取video标签
+            var con = {
+                audio: false,
+                video: true,
+                video: {
+                    width: 1980,
+                    height: 1024,
+                }
+            };
+
+            //导航 获取用户媒体对象
+            navigator.mediaDevices.getUserMedia(con)
+                .then(function (stream) {
+                    try {
+                        video.src = window.URL.createObjectURL(stream);
+                    } catch (e) {
+                        video.srcObject = stream;
+                    }
+
+                    video.onloadmetadate = function (e) {
+                        video.play();
+                    }
+                });
+        }
+
+        var getBase64 = () => {
+            // 将canvas中的数据转化为image/png
+            var imgSrc = document.getElementById("canvas").toDataURL();
+            // imgSrc的格式为data:image/png;base64,......(图像数据)，所有以"base64,"来切割imgSrc
+            return imgSrc.split("base64,")[1];
+        }
+
+        var btnClick = () => {
+            console.log("onclick");
+
+            let t = "adfadasfasdafs"
+            saveToken(t)
+
+            context.drawImage(video, 0, 0, 530, 300)
+            console.log(getBase64());
+            var data = getBase64();
+            var url = rootUrl + (app.btn_status === 0 ? "face/login" : "face/register/" + getQueryString('id'))
+            console.log('url: ', url);
+
+            let atoken = '24.23e97faf42ad91a9ec8e5700e85abadd.2592000.1582384081.282335-18334413'
+        }
+    </script>
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data() {
+                return {
+                    btn_status: 0,
+                    api_msg: 'aaaaa'
+                }
+            },
+            mounted() {
+                this.btn_status = parseInt(s != null ? s : '0')
+                run()
+            },
+            methods: {
+                setApiMsg(msg) {
+                    this.api_msg = msg
+                    setTimeout(() => {
+                        this.api_msg = ''
+                    }, 3 * 1000);
+                },
+                handleFace() {
+                    var canvas = document.getElementById("canvas")
+                    var context = canvas.getContext("2d");
+                    context.drawImage(video, 0, 0, 530, 300)
+                    var data = getBase64();
+                    console.log(data);
+
+                    let url = (this.btn_status === 0 ? "login" : "register")
+                    console.log(this.btn_status === 0 ? "login" : "register");
+                    // postApi('/api/face/' + url, { data: data }).then((resp) => {
+                    //     console.log(resp);
+                    //     console.log(resp.data.message);
+                    //     app.setApiMsg(resp.data.message);
+                    // }).catch((error) => {
+                    //     console.log(error);
+                    //     app.setApiMsg(error.resp);
+                    // })
+                },
+            }
+        })
+    </script>
+</body>
+
+</html>

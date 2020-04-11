@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <title>左右过度切换的登录注册页面演示</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div class="content" id="app">
+        <div class="form sign-in">
+            <h2>欢迎回来</h2>
+            <label>
+                <span>用户名</span>
+                <input type="text" v-model="loginname" />
+            </label>
+            <label>
+                <span>密码</span>
+                <input type="password" v-model="password" />
+            </label>
+            <p class="forgot-pass"><a href="javascript:">忘记密码？</a></p>
+            <button type="button" class="submit" @click="handleLogin">登 录</button>
+            <!-- <button type="button">刷 脸</button> -->
+        </div>
+        <!-- <div class="sub-cont">
+            <div class="img">
+                <div class="img__text m--up">
+                    <h2>没有账号？</h2>
+                    <p>点击下方按钮，立即注册！</p>
+                </div>
+                <div class="img__text m--in">
+                    <h2>已有帐号？</h2>
+                    <p>点击下方按钮，立即登录！</p>
+                </div>
+                <div class="img__btn">
+                    <span class="m--up">注 册</span>
+                    <span class="m--in">登 录</span>
+                </div>
+            </div>
+            <div class="form sign-up">
+                <h2>立即注册</h2>
+                <label>
+                    <span>用户名</span>
+                    <input type="text" />
+                </label>
+                <label>
+                    <span>邮箱</span>
+                    <input type="email" />
+                </label>
+                <label>
+                    <span>密码</span>
+                    <input type="password" />
+                </label>
+                <label>
+                    <span>确认密码</span>
+                    <input type="password" />
+                </label>
+                <button type="button" class="submit">注 册</button>
+            </div>
+        </div> -->
+    </div>
+
+    <!-- <script src="js/login.js"></script> -->
+    <script src="./static/vue.js"></script>
+    <script src="./js/utils.js"></script>
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data() {
+                return {
+                    loginname: "",
+                    password: ""
+                }
+            },
+            methods: {
+                handleLogin() {
+                    let o = {
+                        loginName: this.loginname,
+                        password: this.password
+                    }
+                    postApi('/login', o).then(resp => {
+                        console.log('seuucss');
+                        // saveToken("")
+                    }).catch(error => {
+                        console.log(error);
+
+                    })
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

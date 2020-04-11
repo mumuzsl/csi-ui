@@ -1,16 +1,17 @@
-// const rootUrl = 'http://localhost:8888'
-const rootUrl = 'http://mumu.biz:8888'
-const token = 'token=666666'
+// const rootUrl = 'http://mumu.biz:8888'
+// const token = 'token=666666'
 const user_status = 1
-// const token = 'token=2f373797591948a398244d60766964ce'
-
-
-const user_status = 2
+const rootUrl = 'http://localhost:8888'
+const token = '2f373797591948a398244d60766964ce'
 
 function toError(httpStatus) {
     if (httpStatus === 403) {
         toUrl('/error/' + httpStatus)
     }
+}
+
+function toLocalUrl(url) {
+    window.location.href = url
 }
 
 function toUrl(url) {
@@ -26,7 +27,7 @@ function toDownDocument(id) {
 }
 
 function perfectUrl(url) {
-    return rootUrl + url + '?' + token
+    return rootUrl + url + '?'
 }
 
 function getApi(url) {
@@ -50,7 +51,9 @@ function joinUrl(data) {
 function getRender(el, url, cols, data) {
     return {
         elem: el,
-        url: rootUrl + url + '?' + token + joinUrl(data),
+        // url: rootUrl + url + '?' + token + joinUrl(data),
+        url: rootUrl + url + '?',
+        headers: { token: token },
         parseData: function (resp) {
             console.log(resp);
             resp.content.forEach(element => {
@@ -134,4 +137,4 @@ function backToUrl(url, e) {
     }
 }
 
-saveToken('666666')
+// saveToken('666666')
