@@ -103,7 +103,7 @@
         requestAnimationFrame(step);
         context.clearRect(0, 0, w, h);
         results = [];
-        console.log("len", confetti.length);
+        // console.log("len", confetti.length);
         for (j = 0, len = confetti.length; j < len; j++) {
             c = confetti[j];
             results.push(c.draw());

@@ -66,7 +66,7 @@
 					// layer.msg(response.data.message)	
 					form.val("formTest", data);
 				}).catch(function (error) {
-					console.log(error);
+					console.log(error.response.data);
 					layer.msg("出错啦！")
 				});
 			}
@@ -81,12 +81,14 @@
 				// layer.msg(JSON.stringify(data.field));
 				console.log(JSON.stringify(data.field))
 
+				console.log(token);
+
 				updateOrInsert('/api/user/a/', data.field, event, id).then((response) => {
 					console.log(response);
 					layer.msg("成功啦！")
 					backToUrl("p1.html", event)
 				}).catch(function (error) {
-					console.log(error);
+					console.log(error.response.data);
 					layer.msg("出错啦！")
 					toError(error.response.status)
 				});

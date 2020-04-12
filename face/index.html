@@ -32,7 +32,7 @@
             border-radius: 10px;
             width: 100%;
             height: 50px;
-            font-size: 25px;
+            font-size: 15px;
             text-align: center;
             /* letter-spacing: 50px; */
             /* text-indent: 40px; */
@@ -57,7 +57,7 @@
 
         .btn:hover {
             opacity: .8;
-            /* border: 2px whitesmoke solid; */
+            /* border: 2px yellow solid; */
         }
 
         .btn:active {
@@ -83,11 +83,12 @@
         #world {
             position: absolute;
             z-index: -2;
+            /* pointer-events: none */
         }
 
         #app {
             position: absolute;
-            z-index: -1;
+            z-index: 1;
         }
     </style>
 </head>
@@ -99,7 +100,7 @@
             <canvas id="canvas" width="530" height="300"></canvas>
         </div>
         <div class="center-box">
-            <button @click="handleFace" class="btn" v-bind:disabled="btn_disable">{{btn_status===0?'登录':'注册'}}</button>
+            <button @click="handleFace" class="btn"><span>{{btn_status===0?'登录':'注册'}}</span></button>
         </div>
         <div class="center-box msg-box">
             <span>{{api_msg}}</span>
@@ -165,9 +166,8 @@
             el: '#app',
             data() {
                 return {
-                    btn_disable: true,
                     btn_status: 0,
-                    // api_msg: '当前人脸各项功能需要https，故暂不支持人脸各项功能'
+                    // api_msg: '当前人脸各项功能需要https, 故暂不支持人脸各项功能'
                     api_msg: ''
                 }
             },
@@ -191,14 +191,24 @@
 
                     let url = (this.btn_status === 0 ? "login" : "register")
                     console.log(this.btn_status === 0 ? "login" : "register");
-                    // postApi('/api/face/' + url, { data: data }).then((resp) => {
-                    //     console.log(resp);
-                    //     console.log(resp.data.message);
-                    //     app.setApiMsg(resp.data.message);
-                    // }).catch((error) => {
-                    //     console.log(error);
-                    //     app.setApiMsg(error.resp);
-                    // })
+
+                    postApi('/api/face/' + url, { data: data }).then((resp) => {
+                        console.log(resp);
+                        console.log(resp.data.message);
+                        // app.setApiMsg(resp.data.message);
+                        if (url === "login") {
+                            let at = resp.data.data.accessToken
+                            console.log(at)
+                            saveToken(at)
+                            // setTimeout(function () {
+                            //     toLocalUrl('/')
+                            // }, 2000)
+                        }
+                        toLocalUrl('/')
+                    }).catch((error) => {
+                        console.log(error);
+                        app.setApiMsg(error.resp);
+                    })
                 },
             }
         })

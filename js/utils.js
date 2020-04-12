@@ -1,23 +1,27 @@
-// const rootUrl = 'http://mumu.biz:8888'
+// const apiUrl = 'http://mumu.biz:8888'
 // const token = 'token=666666'
 const user_status = 1
-// const rootUrl = 'http://47.98.147.56:9999'
-const rootUrl = 'http://localhost:8888'
-const token = '666666'
-
-function toError(httpStatus) {
-    if (httpStatus === 403) {
-        toUrl('/error/' + httpStatus)
-    }
-}
+// const apiUrl = 'http://47.98.147.56:9999'
+const apiUrl = 'http://localhost:9999'
+const rootUrl = apiUrl
 
 function toLocalUrl(url) {
     window.location.href = url
 }
 
 function toUrl(url) {
-    window.location.href = rootUrl + url
+    window.location.href = apiUrl + url
 }
+
+function toError(httpStatus) {
+    if (httpStatus === 403) {
+        // toUrl('/error/' + httpStatus)
+        alert("你没有权限执行该操作!")
+    } else if (httpStatus == 401) {
+        // toLocalUrl('/login.html')
+    }
+}
+
 
 function toUrlAndToken(url) {
     window.location.href = perfectUrl(url)
@@ -28,23 +32,7 @@ function toDownDocument(id) {
 }
 
 function perfectUrl(url) {
-    return rootUrl + url + '?'
-}
-
-function getApi(url) {
-    return axios.get(perfectUrl(url), {
-        //请求头配置  
-        headers: { token: token }
-    })
-}
-
-function postApi(url, data) {
-    return axios.post(perfectUrl(url), //参数列表
-        data,
-        //请求头配置   
-        {
-            headers: { token: token }
-        })
+    return apiUrl + url + '?'
 }
 
 function joinUrl(data) {
@@ -57,31 +45,20 @@ function joinUrl(data) {
     return d
 }
 
-function getRender(el, url, cols, data) {
-    return {
-        elem: el,
-        // url: rootUrl + url + '?' + token + joinUrl(data),
-        url: rootUrl + url + '?',
-        headers: { token: token },
-        parseData: function (resp) {
-            console.log(resp);
-            resp.content.forEach(element => {
-                element["S"] = user_status
-            });
-            return {
-                "code": 0,
-                "msg": "",
-                "count": resp.totalElements,
-                "data": resp.content
-            }
-        },
-        request: {
-            limitName: 'size' //每页数据量的参数名，默认：limit
-        },
-        page: true,
-        // height: 'full-10',
-        cols: [cols]
-    }
+function readLocalStorage(key) {
+    return localStorage.getItem(key)
+}
+
+function clearLocalStorage() {
+    localStorage.clear();
+}
+
+function saveToken(token) {
+    localStorage.setItem('token', token)
+}
+
+function readToken() {
+    return readLocalStorage('token')
 }
 
 function datetimeFormat(longTypeDate) {
@@ -112,12 +89,62 @@ function getQueryString(name) {
     return null;
 }
 
-function saveToken(token) {
-    localStorage.setItem('token', token)
+function backToUrl(url, e) {
+    if (e === 'edit') {
+        setTimeout(() => {
+            window.location.href = url
+        }, 500);
+    }
 }
 
-function readLocalStorage(key) {
-    return localStorage.getItem(key)
+// 需要token
+
+const token = readToken()
+// const token = '666666'
+
+function getApi(url) {
+    return axios.get(perfectUrl(url), {
+        //请求头配置  
+        headers: { token: token }
+    })
+}
+
+function postApi(url, data) {
+    return axios.post(perfectUrl(url),
+        //参数列表
+        data,
+        //请求头配置   
+        {
+            headers: { token: token }
+        })
+}
+
+
+function getRender(el, url, cols, data) {
+    return {
+        elem: el,
+        // url: apiUrl + url + '?' + token + joinUrl(data),
+        url: apiUrl + url + '?',
+        headers: { token: token },
+        parseData: function (resp) {
+            console.log(resp);
+            resp.content.forEach(element => {
+                element["S"] = user_status
+            });
+            return {
+                "code": 0,
+                "msg": "",
+                "count": resp.totalElements,
+                "data": resp.content
+            }
+        },
+        request: {
+            limitName: 'size' //每页数据量的参数名，默认：limit
+        },
+        page: true,
+        // height: 'full-10',
+        cols: [cols]
+    }
 }
 
 function updateOrInsert(u, data, flag, id) {
@@ -135,15 +162,11 @@ function updateOrInsert(u, data, flag, id) {
     }
     console.log('data', data1);
 
-    return axios.post(perfectUrl(u), data1)
-}
-
-function backToUrl(url, e) {
-    if (e === 'edit') {
-        setTimeout(() => {
-            window.location.href = url
-        }, 500);
-    }
+    return axios.post(perfectUrl(u), data1,
+        //请求头配置   
+        {
+            headers: { token: token }
+        })
 }
 
 // saveToken('666666')
