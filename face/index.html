@@ -124,7 +124,11 @@
                 }
             };
 
-            if (navigator.mediaDevices.getUserMedia === undefined) {
+            var protocolStr = document.location.protocol;
+            console.log(protocolStr);
+
+            if (protocolStr == "http:") {
+                console.log("protocol = " + protocolStr);
                 app.setApiMsg('人脸功能暂时不能使用!!!')
                 return
             }
