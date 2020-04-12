@@ -2,7 +2,7 @@
 // const token = 'token=666666'
 const user_status = 1
 // const rootUrl = 'http://47.98.147.56:9999'
-const rootUrl = 'http://localhost:9999'
+const rootUrl = 'http://localhost:8888'
 const token = '666666'
 
 function toError(httpStatus) {
