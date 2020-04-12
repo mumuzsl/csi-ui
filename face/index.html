@@ -124,6 +124,11 @@
                 }
             };
 
+            if (navigator.mediaDevices.getUserMedia === undefined) {
+                app.setApiMsg('人脸功能暂时不能使用!!!')
+                return
+            }
+
             //导航 获取用户媒体对象
             navigator.mediaDevices.getUserMedia(con)
                 .then(function (stream) {
