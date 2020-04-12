@@ -223,7 +223,7 @@
           }).catch(function (error) {
             console.log(error);
             // layer.msg("获取用户信息失败啦！")
-            toLocalUrl('/login.html')
+            toLocalUrl('./login.html')
           });
         },
         handleLogout() {
@@ -231,7 +231,7 @@
           getApi('/logout').then((resp) => {
             console.log(resp);
             clearLocalStorage()
-            toLocalUrl('/login.html')
+            toLocalUrl('./login.html')
           }).catch(function (error) {
             console.log(error);
             // layer.msg("获取用户信息失败啦！")
