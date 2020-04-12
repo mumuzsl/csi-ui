@@ -113,6 +113,8 @@
         console.log(typeof (s))
     </script>
     <script>
+        var disable = false
+
         function run() {
             var video = document.getElementById("video"); //获取video标签
             var con = {
@@ -129,7 +131,7 @@
 
             if (protocolStr == "http:") {
                 console.log("protocol = " + protocolStr);
-                app.setApiMsg('人脸功能暂时不能使用!!!')
+                disable = true
                 return
             }
 
@@ -183,6 +185,9 @@
             mounted() {
                 this.btn_status = parseInt(s != null ? s : '0')
                 run()
+                if (disable) {
+                    this.api_msg = '人脸功能暂时不能使用!!!'
+                }
             },
             methods: {
                 setApiMsg(msg) {
