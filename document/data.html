@@ -96,7 +96,28 @@
                     console.log(data)
                     window.location.href = "add.html?event=edit&id=" + data.id
                 } else if (layEvent === 'down') {
-                    toDownDocument(data.id)
+                    console.log(data.id);
+                    console.log(data);
+                    let o = { id: data.id }
+                    axios.post(perfectUrl('/download'),
+                        //参数列表
+                        JSON.stringify(data.id),
+                        //请求头配置   
+                        {
+                            headers: {
+                                token: token,
+                                "Content-Type": "application/json"
+                            }
+                        }).then((response) => {
+                            console.log(response.data);
+                            layer.msg("进入下载......")
+                            toUrl('/download/' + response.data)
+                        }).catch(function (error) {
+                            console.log(error);
+                            console.log(error.response);
+                            layer.msg("出错啦！")
+                        });
+                    // toDownDocument(data.id)
                 }
             });
         });

@@ -21,11 +21,11 @@
 			<div class="layui-input-inline">
 				<input type="text" name="loginName" class="layui-input" placeholder="请输入登录名" /></div>
 		</div>
-		<div class="layui-form-item">
+		<!-- <div class="layui-form-item">
 			<label class="layui-form-label">密码：</label>
 			<div class="layui-input-inline">
 				<input type="text" name="password" class="layui-input" placeholder="请输入状态" /></div>
-		</div>
+		</div> -->
 		<div class="layui-form-item">
 			<label class="layui-form-label">状态：</label>
 			<div class="layui-input-inline">
@@ -88,8 +88,13 @@
 					layer.msg("成功啦！")
 					backToUrl("p1.html", event)
 				}).catch(function (error) {
-					console.log(error.response.data);
+					let r = error.response
+					console.log(r);
 					layer.msg("出错啦！")
+					if (r.status === 400) {
+						layer.msg("用户名已存在")
+						return
+					}
 					toError(error.response.status)
 				});
 

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <title>左右过度切换的登录注册页面演示</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .face-login {
+            margin-top: 100px;
+            text-decoration: none;
+        }
+
+        .rpw {
+            display: block;
+            /* margin: 25px auto 0; */
+            margin-top: 10px;
+            /* padding-bottom: 20px; */
+            text-align: center;
+            /* width: 500px; */
+            /* border: 1px red solid; */
+            /* vertical-align: middle; */
+            height: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="content" id="app">
+        <div class="form sign-in">
+            <h2>欢迎回来</h2>
+            <label>
+                <span>旧密码</span>
+                <input type="password" v-model="oldpw" />
+            </label>
+            <label>
+                <span>新密码</span>
+                <input type="password" v-model="newpw" />
+            </label>
+            <label>
+                <span>确认密码</span>
+                <input type="password" v-model="newpw2" v-on:keyup.enter="handleSubmit" />
+            </label>
+            <button type="button" class="submit" @click="handleSubmit">确 定</button>
+        </div>
+    </div>
+
+    <script src="../static/axios.min.js"></script>
+    <script src="../static/vue.js"></script>
+    <script src="../js/utils.js"></script>
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data() {
+                return {
+                    oldpw: "",
+                    newpw: "",
+                    newpw2: ""
+                }
+            },
+            methods: {
+                handleSubmit() {
+                    let o = {
+                        oldPassword: this.oldpw,
+                        newPassword: this.newpw,
+                    }
+
+                    console.log(o);
+                    console.log(token);
+
+
+                    postApi('/update_pw', o).then(resp => {
+                        console.log('seuucss');
+                        console.log(resp);
+                        alert("密码修改成功")
+                        // let accessToken = resp.data.accessToken
+                        // console.log();
+
+                        // saveToken(accessToken)
+                        // seTimeout(function () {
+
+                        // }, 2000)
+                        toLocalUrl('./')
+                    }).catch(error => {
+                        let r = error.response
+                        console.log(r);
+                        // alert(r.data.message)
+                    })
+                },
+            }
+        })
+    </script>
+</body>
+
+</html>

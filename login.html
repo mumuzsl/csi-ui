@@ -10,6 +10,19 @@
             margin-top: 100px;
             text-decoration: none;
         }
+
+        .rpw {
+            display: block;
+            /* margin: 25px auto 0; */
+            margin-top: 10px;
+            /* padding-bottom: 20px; */
+            text-align: center;
+            /* width: 500px; */
+            /* border: 1px red solid; */
+            /* vertical-align: middle; */
+            height: 10px;
+            font-size: 5px;
+        }
     </style>
 </head>
 
@@ -23,48 +36,16 @@
             </label>
             <label>
                 <span>密码</span>
-                <input type="password" v-model="password" />
+                <input type="password" v-model="password" v-on:keyup.enter="handleLogin" />
             </label>
             <!-- <p class="forgot-pass"><a href="javascript:">忘记密码？</a></p> -->
+            <div class="rpw">
+                <input type="checkbox" id="remember_password" @click="handleCheck" v-model="rpw" />记住密码
+            </div>
             <button type="button" class="submit" @click="handleLogin">登 录</button>
             <button type="button" class="submit" @click="handleFaceLogin">刷 脸</button>
         </div>
-        <!-- <div class=" sub-cont">
-                <div class="img">
-                    <div class="img__text m--up">
-                        <h2>没有账号？</h2>
-                        <p>点击下方按钮，立即注册！</p>
-                    </div>
-                    <div class="img__text m--in">
-                        <h2>已有帐号？</h2>
-                        <p>点击下方按钮，立即登录！</p>
-                    </div>
-                    <div class="img__btn">
-                        <span class="m--up">注 册</span>
-                        <span class="m--in">登 录</span>
-                    </div>
-                </div>
-                <div class="form sign-up">
-                    <h2>立即注册</h2>
-                    <label>
-                        <span>用户名</span>
-                        <input type="text" />
-                    </label>
-                    <label>
-                        <span>邮箱</span>
-                        <input type="email" />
-                    </label>
-                    <label>
-                        <span>密码</span>
-                        <input type="password" />
-                    </label>
-                    <label>
-                        <span>确认密码</span>
-                        <input type="password" />
-                    </label>
-                    <button type="button" class="submit">注 册</button>
-                </div>
-        </div> -->
+
     </div>
 
     <!-- <script src="js/login.js"></script> -->
@@ -72,12 +53,24 @@
     <script src="./static/vue.js"></script>
     <script src="./js/utils.js"></script>
     <script>
+        axios.defaults.withCredentials = true
         var app = new Vue({
             el: '#app',
             data() {
                 return {
                     loginname: "",
-                    password: ""
+                    password: "",
+                    rpw: false
+                }
+            },
+            mounted: function () {
+                let pw = localStorage.getItem('pw')
+                let rpw = localStorage.getItem('rpw')
+                let un = localStorage.getItem('un')
+                if (rpw === '1' && pw != '' && un != '') {
+                    this.password = pw
+                    this.rpw = true
+                    this.loginname = un
                 }
             },
             methods: {
@@ -88,18 +81,41 @@
                     }
                     postApi('/login', o).then(resp => {
                         console.log('seuucss');
+                        console.log(resp);
+
+                        this.savepw(this.rpw)
                         let accessToken = resp.data.accessToken
-                        console.log();
+                        // console.log();
 
                         saveToken(accessToken)
                         toLocalUrl('./')
                     }).catch(error => {
-                        console.log(error);
-
+                        let r = error.response
+                        // console.log(r);
+                        alert(r.data.message)
+                        this.savepw(false)
+                        this.rpw = false
                     })
                 },
                 handleFaceLogin() {
                     window.location.href = "./face/index.html"
+                },
+                handleCheck(e) {
+                    let r = e.target.checked
+                    // let r = true
+                    this.rpw = r
+                    // this.savepw(r)
+                },
+                savepw(r) {
+                    if (r) {
+                        localStorage.setItem('un', r ? this.loginname : '')
+                        localStorage.setItem('pw', r ? this.password : '')
+                        localStorage.setItem('rpw', r ? '1' : '0')
+                    } else {
+                        localStorage.removeItem('un')
+                        localStorage.removeItem('pw')
+                        localStorage.removeItem('rpw')
+                    }
                 }
             }
         })

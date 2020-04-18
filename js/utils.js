@@ -115,7 +115,9 @@ function postApi(url, data) {
         data,
         //请求头配置   
         {
-            headers: { token: token }
+            headers: {
+                token: token
+            }
         })
 }
 

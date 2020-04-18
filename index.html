@@ -39,6 +39,7 @@
             <dd><a href="">基本资料</a></dd>
           </dl> -->
         </li>
+        <li class="layui-nav-item"><a href="javascript:;" @click="handleUpdatePW">修改密码</a></li>
         <li class="layui-nav-item"><a href="javascript:;" @click="handleFaceRegister">人脸注册</a></li>
         <li class="layui-nav-item"><a href="javascript:;" @click="handleLogout">退出</a></li>
         <!-- <li class="layui-nav-item">
@@ -230,7 +231,7 @@
           // toUrlAndToken()
           getApi('/logout').then((resp) => {
             console.log(resp);
-            clearLocalStorage()
+            localStorage.removeItem('token')
             toLocalUrl('./login.html')
           }).catch(function (error) {
             console.log(error);
@@ -239,6 +240,9 @@
         },
         handleFaceRegister() {
           toLocalUrl('./face/index.html?s=1')
+        },
+        handleUpdatePW() {
+          toLocalUrl('./editPassword')
         }
       }
     })
